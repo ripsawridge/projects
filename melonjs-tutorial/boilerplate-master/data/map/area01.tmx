@@ -17,13 +17,13 @@
   </tile>
  </tileset>
  <imagelayer name="Parallex_layer1">
-  <image source="../img/area01_bkg0.png"/>
+  <image source="../img/area01_altbkg0.png"/>
   <properties>
    <property name="ratio" value="0.25"/>
   </properties>
  </imagelayer>
  <imagelayer name="Parallex_layer2">
-  <image source="../img/area01_bkg1.png"/>
+  <image source="../img/area01_altbkg1.png"/>
   <properties>
    <property name="ratio" value="0.35"/>
   </properties>

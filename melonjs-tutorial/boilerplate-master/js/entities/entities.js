@@ -29,6 +29,16 @@ game.PlayerEntity = me.Entity.extend({
       }
     }
 
+    // Did we fall off the screen?
+    if (this.body.falling && 
+        this.pos.y > (me.game.viewport.pos.y + me.game.viewport.height)) {
+      // We need to die
+      this.alive = false;
+      me.game.viewport.fadeIn("#dddddd", 1700, function() {
+        me.state.change(me.state.PLAY);
+      });
+    }
+
     this.body.update(dt);
 
     // check for collision with sthg
@@ -43,7 +53,7 @@ game.PlayerEntity = me.Entity.extend({
     return false;
   },
 
-  collideHandler: function(response) {
+  collideHandler: function(response, obj) {
     if (response.b.body.collisionType === me.collision.types.ENEMY_OBJECT) {
       if ((response.overlapV.y>0) && !this.body.jumping) {
         // bounce (force jump)
@@ -51,6 +61,7 @@ game.PlayerEntity = me.Entity.extend({
         this.body.vel.y = -this.body.maxVel.y * me.timer.tick;
         this.body.jumping = true;
         me.audio.play("stomp");
+        response.b.die();
       } else {
         // Let's flicker in case we touched an enemy
         this.renderable.flicker(true);
@@ -100,6 +111,11 @@ game.EnemyEntity = me.Entity.extend({
     this.body.setVelocity(3.3, 6);
   },
 
+  die: function() {
+    this.alive = false;
+    me.game.world.removeChild(this);
+  },
+    
   onCollision: function(res, obj) {
     // res.y > 0 means touched by something on the bottom
     // which means at top bosition for this one

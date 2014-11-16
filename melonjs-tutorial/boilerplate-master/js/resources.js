@@ -11,8 +11,8 @@ game.resources = [
   // our main player
   {name: "gripe_run_right", type: "image", src: "data/img/sprite/gripe_run_right.png" },
   // backgrounds
-  {name: "area01_bkg0", type: "image", src: "data/img/area01_bkg0.png" },
-  {name: "area01_bkg1", type: "image", src: "data/img/area01_bkg1.png" },
+  {name: "area01_altbkg0", type: "image", src: "data/img/area01_altbkg0.png" },
+  {name: "area01_altbkg1", type: "image", src: "data/img/area01_altbkg1.png" },
 
   // coin
   { name: "spinning_coin_gold", type: "image", src: "data/img/sprite/spinning_coin_gold.png" },
