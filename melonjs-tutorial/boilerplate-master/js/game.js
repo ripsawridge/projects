@@ -5,7 +5,17 @@ var game = {
   // an object where to store game information
   data : {
     // score
-    score : 0
+    score : 0,
+    // number of lives
+    lives : 3,
+    // current level
+    current_level: "area01",
+    // reset function
+    "reset" : function() {
+      this.score = 0;
+      this.lives = 3;
+      this.current_level = "area01";
+    }
   },
 	
 	

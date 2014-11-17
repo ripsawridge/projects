@@ -21,11 +21,13 @@ game.PlayerEntity = me.Entity.extend({
       this.body.vel.x = 0;
     }
 
+    var tried_to_jump = false;
     if (me.input.isKeyPressed("jump")) {
       if (!this.body.jumping && !this.body.falling) {
         this.body.vel.y = -this.body.maxVel.y * me.timer.tick;
         this.body.jumping = true;
-        me.audio.play("jump");
+        // me.audio.play("jump");
+        tried_to_jump = true;
       }
     }
 
@@ -33,10 +35,7 @@ game.PlayerEntity = me.Entity.extend({
     if (this.body.falling && 
         this.pos.y > (me.game.viewport.pos.y + me.game.viewport.height)) {
       // We need to die
-      this.alive = false;
-      me.game.viewport.fadeIn("#dddddd", 1700, function() {
-        me.state.change(me.state.PLAY);
-      });
+      this.die();
     }
 
     this.body.update(dt);
@@ -45,6 +44,9 @@ game.PlayerEntity = me.Entity.extend({
     me.collision.check(this, true, this.collideHandler.bind(this), true);
 
     if (this.body.vel.x != 0 || this.body.vel.y != 0) {
+      if (tried_to_jump && this.body.vel.y != 0) {
+        me.audio.play("jump");
+      }
       this._super(me.Entity, "update", [dt]);
       return true;
     }
@@ -62,11 +64,29 @@ game.PlayerEntity = me.Entity.extend({
         this.body.jumping = true;
         me.audio.play("stomp");
         response.b.die();
+        game.data.score += 30;
       } else {
         // Let's flicker in case we touched an enemy
         this.renderable.flicker(true);
       }
+    } else if (response.b.body.collisionType == me.collision.types.ACTION_OBJECT) {
+      // b is a LevelEntity. Indicate our new respawn point.
+      game.data.current_level = response.b.nextlevel;
     }
+  },
+
+  die: function() {
+    if (this.alive) {
+      game.data.lives--;
+      this.alive = false;
+    }
+    me.game.viewport.fadeIn("#dddddd", 1700, function() {
+      if (game.data.lives == 0) {
+        me.state.change(me.state.MENU);
+      } else {
+        me.state.change(me.state.PLAY);
+      }
+    });
   }
 });
 

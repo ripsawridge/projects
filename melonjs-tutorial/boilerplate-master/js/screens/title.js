@@ -3,6 +3,9 @@ game.TitleScreen = me.ScreenObject.extend({
    *  action to perform on state change
    */
   onResetEvent: function() {	
+    // Reset score, lives, level.
+    game.data.reset();
+
     me.game.world.addChild(
       new me.Sprite(0, 0, me.loader.getImage("title_screen")),
       1);
