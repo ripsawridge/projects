@@ -10,6 +10,10 @@ game.PlayerEntity = me.Entity.extend({
   },
 
   update: function(dt) {
+    if (this.alive === false) {
+      return false;
+    }
+
     if (me.input.isKeyPressed("left")) {
       // flip the sprite.
       this.flipX(true);
@@ -67,7 +71,9 @@ game.PlayerEntity = me.Entity.extend({
         game.data.score += 30;
       } else {
         // Let's flicker in case we touched an enemy
-        this.renderable.flicker(true);
+        // this.renderable.flicker(true);
+        // Naw, let's just die.
+        this.die();
       }
     } else if (response.b.body.collisionType == me.collision.types.ACTION_OBJECT) {
       // b is a LevelEntity. Indicate our new respawn point.
