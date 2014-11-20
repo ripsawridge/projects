@@ -14,6 +14,9 @@ game.resources = [
   {name: "area01_altbkg0", type: "image", src: "data/img/area01_altbkg0.png" },
   {name: "area01_altbkg1", type: "image", src: "data/img/area01_altbkg1.png" },
 
+  {name: "area01_bkg0", type: "image", src: "data/img/area01_bkg0.png" },
+  {name: "blackbox", type: "image", src: "data/img/blackbox.jpg" },
+
   // coin
   { name: "spinning_coin_gold", type: "image", src: "data/img/sprite/spinning_coin_gold.png" },
   // Baddie
@@ -37,6 +40,7 @@ game.resources = [
    */
   {name: "area01", type: "tmx", src: "data/map/area01.tmx"},
   {name: "area02", type: "tmx", src: "data/map/area02.tmx"},
+  {name: "area03", type: "tmx", src: "data/map/area03.tmx"},
 
   /* Background music. 
    * @example

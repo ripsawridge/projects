@@ -9,7 +9,7 @@ var game = {
     // number of lives
     lives : 3,
     // current level
-    current_level: "area01",
+    current_level: "area03",
     // reset function
     "reset" : function() {
       this.score = 0;
