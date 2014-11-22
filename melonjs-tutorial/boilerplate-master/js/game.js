@@ -10,6 +10,7 @@ var game = {
     lives : 3,
     // This is programmatically determined on level loads.
     coinsNotCollected : 0,
+    collectedCoins : [],
     // current level
     current_level: "area03",
     // reset function
@@ -18,6 +19,7 @@ var game = {
       this.lives = 3;
       this.current_level = "area01";
       this.coinsNotCollected = 0;
+      this.collectedCoins = [];
     }
   },
 	
@@ -83,6 +85,19 @@ var game = {
     // exit the level.
     var coins = me.game.world.getChildByName("CoinEntity");
     game.data.coinsNotCollected = coins.length;
+
+    // Remove the coins that we already collected
+    for (var i = 0; i < game.data.collectedCoins.length; i++) {
+      for (var x = 0; x < coins.length; x++) {
+        var pos = game.data.collectedCoins[i];
+        if (coins[x].pos.x === pos.x &&
+            coins[x].pos.y === pos.y) {
+          console.log("removing coin at " + pos.x + ", " + pos.y);
+          me.game.world.removeChild(coins[x]);
+          game.data.coinsNotCollected--;
+        }
+      }
+    }
   },
 
   "shouldCollide" : function(a, b) {

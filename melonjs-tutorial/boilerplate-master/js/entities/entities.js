@@ -76,12 +76,14 @@ game.PlayerEntity = me.Entity.extend({
         this.die();
       }
     } else if (response.b.body.collisionType == me.collision.types.ACTION_OBJECT) {
+      game.data.collectedCoins = [];
       game.data.current_level = response.b.nextlevel;
     }
   },
 
   die: function() {
     if (this.alive) {
+      me.audio.play("die");
       game.data.lives--;
       this.alive = false;
     }
@@ -106,7 +108,7 @@ game.CoinEntity = me.CollectableEntity.extend({
   onCollision: function() {
     game.data.score += 3;
     game.data.coinsNotCollected--;
-
+    game.data.collectedCoins.push(this.pos);
     me.audio.play("cling");
 
     this.body.setCollisionMask(me.collision.types.NO_OBJECT);
