@@ -23,8 +23,8 @@ game.HUD.Container = me.Container.extend({
     // give a name
     this.name = "HUD";
     
-    // add our child score object at the top left corner
-    this.addChild(new game.HUD.ScoreItem(430, 440));
+    // add our child score object at the lower right corner
+    this.addChild(new game.HUD.ScoreItem(230, 440));
   }
 });
 
@@ -51,6 +51,8 @@ game.HUD.ScoreItem = me.Renderable.extend({
     // local copy of the lives
     this.lives = -1;
 
+    this.coinsNotCollected = -1;
+
     // make sure we use screen coordinates
     this.floating = true;
   },
@@ -62,9 +64,11 @@ game.HUD.ScoreItem = me.Renderable.extend({
     // we don't do anything fancy here, so just
     // return true if the score has been updated
     if (this.score !== game.data.score ||
-        this.lives !== game.data.lives) {
+        this.lives !== game.data.lives ||
+        this.coinsNotCollected != game.data.coinsNotCollected) {
       this.score = game.data.score;
       this.lives = game.data.lives;
+      this.coinsNotCollected = game.data.coinsNotCollected;
       return true;
     }
     return false;
@@ -74,8 +78,9 @@ game.HUD.ScoreItem = me.Renderable.extend({
    * draw the score
    */
   draw : function (context) {
-    this.font.draw(context, game.data.score, this.pos.x + 200, this.pos.y);
-    this.font.draw(context, game.data.lives, this.pos.x, this.pos.y);
+    this.font.draw(context, game.data.coinsNotCollected, this.pos.x, this.pos.y);
+    this.font.draw(context, game.data.score, this.pos.x + 400, this.pos.y);
+    this.font.draw(context, game.data.lives, this.pos.x + 200, this.pos.y);
   }
 
 });

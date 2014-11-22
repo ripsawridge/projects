@@ -76,7 +76,6 @@ game.PlayerEntity = me.Entity.extend({
         this.die();
       }
     } else if (response.b.body.collisionType == me.collision.types.ACTION_OBJECT) {
-      // b is a LevelEntity. Indicate our new respawn point.
       game.data.current_level = response.b.nextlevel;
     }
   },
@@ -106,6 +105,7 @@ game.CoinEntity = me.CollectableEntity.extend({
 
   onCollision: function() {
     game.data.score += 3;
+    game.data.coinsNotCollected--;
 
     me.audio.play("cling");
 
