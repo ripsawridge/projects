@@ -78,6 +78,16 @@ var ClimbGrades = (function() {
 
 
   function ToIndex(string_value, grade) {
+    if (typeof string_value !== "string") {
+      throw new TypeError("expected string for string_value.");
+    }
+
+    string_value = string_value.trim();
+    // string_value shouldn't have any spaces now, if it does throw an error.
+    if (string_value.indexOf(" ") !== -1) {
+      throw new TypeError("string_value shouldn't have any spaces.");
+    }
+
     if (!grade.hasOwnProperty("value")) {
       throw new TypeError("invalid grade parameter.");
     }
@@ -86,9 +96,43 @@ var ClimbGrades = (function() {
       throw new TypeError("grade.value is invalid.");
     }
 
+    // Slashes are only allowed in UIAA, sorry.
+    if (grade != GRADE.UIAA && string_value.indexOf("/") !== -1) {
+      throw new TypeError("Slash (/) grades are only supported for UIAA ratings.");
+    }
+
+    // Accept that YDS or FRENCH might specify a plus or - at the end. - is 
+    // ignored and removed, but plus offers a hint to the resolver to choose the
+    // highest index that matches the grade.
+    var find_highest = false;
+    if (grade == GRADE.YDS || 
+        (grade == GRADE.FRENCH && parseInt(string_value[0]) <= 5)) {
+      var pos = string_value.indexOf("-");
+      if (pos !== -1) {
+        if (pos != (string_value.length - 1)) {
+          throw new TypeError("a YDS or FRENCH grade allows a - only at the end.");
+        }
+        string_value = string_value.substr(0, string_value.length - 1);
+      }
+      pos = string_value.indexOf("+");
+      if (pos !== -1) {
+        if (pos != (string_value.length - 1)) {
+          throw new TypeError("a YDS or FRENCH grade allows a + only at the end.");
+        }
+        find_highest = true;
+        string_value = string_value.substr(0, string_value.length - 1);
+      }
+    }
+
     var column = grade.value;
     for (var i = 0; i < chart.length; i++) {
       if (chart[i][column] === string_value) {
+        if (find_highest === true) {
+          // Keep looking higher.
+          var j = i + 1;
+          while (j < chart.length && chart[j][column] === string_value) j++;
+          return j - 1;
+        }
         return i;
       }
     }
@@ -104,6 +148,9 @@ var ClimbGrades = (function() {
   return module;
 }());
 
+exports = module.exports = ClimbGrades;
+
+/*
 function ParseSportGradeFromUIAA(uiaa) {
   var trimmed_uiaa = uiaa.trim();
   var index = ClimbGrades.ToIndex(trimmed_uiaa, ClimbGrades.GRADE.UIAA);
@@ -151,3 +198,4 @@ function Main() {
 }
 
 Main();
+*/
