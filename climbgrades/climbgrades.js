@@ -1,4 +1,4 @@
-
+// Copyright 2014, Michael Stanton.
 var ClimbGrades = (function() {
 
   // index UIAA           YDS             French
@@ -148,54 +148,6 @@ var ClimbGrades = (function() {
   return module;
 }());
 
+// Uncomment this if you are embedding in a web page.
 exports = module.exports = ClimbGrades;
 
-/*
-function ParseSportGradeFromUIAA(uiaa) {
-  var trimmed_uiaa = uiaa.trim();
-  var index = ClimbGrades.ToIndex(trimmed_uiaa, ClimbGrades.GRADE.UIAA);
-  return index;
-}
-
-
-function UIAAFromSportGrade(grade) {
-  var uiaa_string = ClimbGrades.FromIndex(grade, ClimbGrades.GRADE.UIAA);
-  return uiaa_string;
-}
-
-function print(str) {
-  console.log(str);
-}
-
-
-function Main() {
-  var arguments = process.argv.slice(2);
-  if (arguments.length == 0) {
-    console.log("Usage: " + process.argv[1] + 
-                " <space separated UIAA graded climbs>");
-    return 1;
-  }
-
-  accum = 0.0;
-  climb_count = 0;
-  for (var i = 0; i < arguments.length; i++) {
-    var arg = arguments[i];
-    sport_grade = ParseSportGradeFromUIAA(arg);
-    if (sport_grade < 0) {
-      print("Expression " + arg + " could not be parsed");
-    } else {
-      print(arg + " -> " + sport_grade);
-      climb_count = climb_count + 1;
-      accum = accum + sport_grade;
-    }
-  }
-
-  average = Math.round(accum / climb_count);
-  str_average_rating = UIAAFromSportGrade(average);
-  print("UIAA average rating -> " + str_average_rating);
-  print("Average sport grade -> " + average);
-  print("Total effort        -> " + accum);
-}
-
-Main();
-*/
