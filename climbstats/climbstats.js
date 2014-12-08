@@ -33,6 +33,25 @@ function ProcessData(data) {
   // hardest route attempted.
   // mean grade (climbed or attempted).
   // median grade (climbed or attempted).
+
+  // Order by date.
+  data.sort(function(a, b) {
+    a = new Date(a.date);
+    b = new Date(b.date);
+    if (a < b) return -1;
+    else if (a > b) return 1;
+    return 0;
+  });
+
+  
+  // Print out simple data.
+  for (var i = 0; i < data.length; i++) {
+    var entry = data[i];
+    if (entry.notes.trim() === "") {
+      console.log(entry.date + " " + entry.index);
+    }
+  }
+
 }
 
 
@@ -64,7 +83,7 @@ function Main() {
     }
     data = JSON.parse(data);
     ProcessData(data);
-  }
+  });
 
   return 0;
 }
