@@ -1,41 +1,17 @@
 // Copyright 2015, Michael Stanton.
 var KYNumbers = (function() {
+  var xmldoc = require('./xmldoc');
+  var fs = require("fs");
+  var contents = fs.readFileSync("./kynumbers.xml");
+  var data_doc = new xmldoc.XmlDocument(contents);
+
   var FEATURE = {
-    SOUL:   { value: 0, name: "SOUL" },
-    KARMA:  { value: 1, name: "KARMA" },
-    GIFT:   { value: 2, name: "GIFT" },
-    DESTINY:{ value: 3, name: "DESTINY" },
-    PATH:   { value: 4, name: "PATH" }
+    SOUL:   { value: 0, name: "soul" },
+    KARMA:  { value: 1, name: "karma" },
+    GIFT:   { value: 2, name: "gift" },
+    DESTINY:{ value: 3, name: "destiny" },
+    PATH:   { value: 4, name: "path" }
   };
-
-  var NUMBERS = [
-    "The first Spiritual Body is the Soul: it is represented by Guru " +
-    "Nanak and Guru Nanak represented Humility. " +
-    "The negative aspect of the number 1 is non-creativity. A person " +
-    "with a 1 in a negative position will have zero creativity. This " +
-    "is the most negative aspect of the number 1. He will be " +
-    "completely head-dominant.",
-
-    "The key phrase for the number 2 is 'Longing to Belong.' In order " +
-    "to make this number harmonize you have to connect with your " +
-    "spiritual teacher. This body is represented by Guru Angad - " +
-    "Obedience." +
-    "The negative aspect of the number 2 is that this person will form " +
-    "negative associations or he will be unable to calculate the " +
-    "danger in any situation.",
-
-    "The Third Spiritual Body is the Positive Mind. It is represented " +
-    "by Guru Amar Das - Equality." +
-    "A 3 is flexible and mischievous. He gets pulled down by negativity " +
-    "and needs a positive sense of humor." +
-    "The negative aspect of the number 3 is that this person will not " +
-    "able to see the good in situations.",
-
-    "The Fourth Body is the Neutral Mind. It is represented by Guru " +
-    "Ram Das - Service.",
-
-    
-  ];
     
   function reduceNumber(num) {
     var threshold = 12;
@@ -93,14 +69,20 @@ var KYNumbers = (function() {
     return result;
   }
 
-  function DescribeNumber(feature, number) {
+  function DescribeFeature(feature) {
+  }
+
+  function DescribeNumber(number) {
+  }
+
+  function DescribeFeatureNumber(feature, number) {
     if (!feature.hasOwnProperty("name") ||
         !feature.hasOwnProperty("value")) {
       throw new TypeError("invalid feature parameter.");
     }
 
     if (isNaN(parseInt(feature.value)) ||
-        feature.value < 1 || feature.value > 5) {
+        feature.value < 0 || feature.value > 4) {
       throw new TypeError("feature.value is invalid.");
     }
 
@@ -108,11 +90,23 @@ var KYNumbers = (function() {
       throw new TypeError("Invalid number parameter.");
     }
 
+    var numbers = data_doc.childNamed("numbers");
+    for (var i = 0; i < numbers.children.length; i++) {
+      var number_object = numbers.children[i];
+      if (parseInt(number_object.attr.value) === number) {
+        var feature_data = number_object.childNamed(feature.name);
+        var text = feature_data.val;
+        return text;
+      }
+    }
+    return "";
   }
 
   var module = {
     GetNumbers: GetNumbers,
-    DescribeNumber: DescribeNumber
+    DescribeFeature: DescribeFeature,
+    DescribeNumber: DescribeNumber,
+    DescribeFeatureNumber: DescribeFeatureNumber
   };
 
   return module;

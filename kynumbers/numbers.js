@@ -21,6 +21,9 @@ function Main() {
   for (var i = 0; i < nums.length; i++) {
     var pair = nums[i];
     print(pair.feature.name + " " + pair.number);
+    var p = KYNumbers.DescribeFeatureNumber(pair.feature,
+                                            pair.number);
+    print(p);
   }
 }
 
