@@ -46,7 +46,7 @@ var KYNumbers = (function() {
     // Compute soul number.
     var soulNumber = reduceNumber(day);
     result.push(new Pair(FEATURE.SOUL, soulNumber));
-
+    
     // Compute karma number.
     var karmaNumber = reduceNumber(month);
     result.push(new Pair(FEATURE.KARMA, karmaNumber));
