@@ -13,6 +13,7 @@ messagedelay=100
 startlives=3
 flickerdelay=50
 
+
 function make_ship()
  local s = {}
  s.x=128/2
@@ -27,30 +28,33 @@ function make_ship()
  return s
 end
 
+
 function make_bullet(x,y)
-	local b = {}
-	b.x=x
-	b.y=y
-	b.xs=16
-	b.ys=16
-	b.alive=1
-	b.sprite=1
-	return b
+ local b = {}
+ b.x=x
+ b.y=y
+ b.xs=16
+ b.ys=16
+ b.alive=1
+ b.sprite=1
+ return b
 end
 
+
 function make_monster()
-	local m = {}
-	m.xs=16
-	m.ys=16
-	m.x=flr(rnd(128))
-	m.y=-m.ys
-	m.radius=rnd(2)
-	m.fx=m.x
+ local m = {}
+ m.xs=16
+ m.ys=16
+ m.x=flr(rnd(128))
+ m.y=-m.ys
+ m.radius=rnd(2)
+ m.fx=m.x
  m.r=0.0
-	m.alive=1
-	m.sprite=2
-	return m
+ m.alive=1
+ m.sprite=2
+ return m
 end
+
 
 function make_kid()
  local k = {}
@@ -58,8 +62,8 @@ function make_kid()
  k.ys=16
  k.x=k.xs+flr(rnd(128-k.xs))
  k.y=-k.ys
-	k.radius=rnd(1.5)
-	k.fx=k.x
+ k.radius=rnd(1.5)
+ k.fx=k.x
  k.r=0.0
  k.alive=1
  k.sprite=16
@@ -70,16 +74,17 @@ function make_kid()
   if(dice<60) then
    k.name="elijah"
   else
-  	if(dice<90) then
-  	 k.name="nicolau"
-  	else
-  	 k.name="antonia"
-  	end
+   if(dice<90) then
+    k.name="nicolau"
+   else
+    k.name="antonia"
+   end
   end
  end
 
  return k
 end
+
 
 function make_star()
  local s = {}
@@ -91,16 +96,17 @@ function make_star()
  if(dice<25) then
   s.color=6 --gray
  else
- 	if(dice<35) then
- 		s.color=10 --yellow
- 	end
+  if(dice<35) then
+   s.color=10 --yellow
+  end
  end
  return s
 end
 
+
 function _init()
-	stars = {}
-	ship = make_ship()
+ stars = {}
+ ship = make_ship()
  bullets = {}
  monsters = {}
  kids = {}
@@ -119,9 +125,11 @@ function _init()
  music(0, 1000, 1+2+4)
 end
 
+
 function set_message(m)
  message=m
 end
+
 
 function increase_score(n)
  if(score+n>free_life) then
@@ -134,27 +142,29 @@ function increase_score(n)
  score+=n
 end
 
+
 function decrease_score(n)
  score=max(0,score-n)
 end
+
 
 function update_ship()
  if(ship.alive==0) then
   if(ship.sprite<8) then
    ship.sprite+=1
   else
-  	ship.deathcount-=1
-  	if(ship.deathcount<=0) then
-  	 ship.alive=1
-  	 ship.sprite=0
-  	 ship.x=128/2
-  	 ship.deathcount=deathdelay
-  	 ship.flickering=1
-  	 ship.flickercount=flickerdelay
-  	 music(0, 1000, 1+2+4)
-  	end
+   ship.deathcount-=1
+   if(ship.deathcount<=0) then
+    ship.alive=1
+    ship.sprite=0
+    ship.x=128/2
+    ship.deathcount=deathdelay
+    ship.flickering=1
+    ship.flickercount=flickerdelay
+    music(0, 1000, 1+2+4)
+   end
   end
-  return
+ return
  end
 
  if(ship.flickering==1) then
@@ -166,62 +176,66 @@ function update_ship()
  end
 
  if(btn(0)) then
- 	ship.x = max(0,ship.x-spd)
+  ship.x = max(0,ship.x-spd)
  else
- 	if(btn(1)) then
- 	 ship.x = min(128-ship.xs,ship.x+spd)
- 	end
+  if(btn(1)) then
+   ship.x = min(128-ship.xs,ship.x+spd)
+  end
  end
 end
 
+
 function new_bullet()
-	local b = {}
-	if(ship.alive==1 and
-	   btn(4) and 
-	   firecount==0 and
-	   count(bullets)<=maxbullets) then
-		b = make_bullet(ship.x, ship.y)
-		add(bullets,b)
-		sfx(0)
-		firecount=firedelay
-	end
-	firecount=max(0,firecount-1)
+ local b = {}
+ if(ship.alive==1 and
+   btn(4) and 
+   firecount==0 and
+   count(bullets)<=maxbullets) then
+  b = make_bullet(ship.x, ship.y)
+  add(bullets,b)
+  sfx(0)
+  firecount=firedelay
+ end
+ firecount=max(0,firecount-1)
 end
 
+
 function new_monster()
-	local m = {}
-	if(count(monsters) < maxmonsters and
-	  monstercount==0) then
+ local m = {}
+ if(count(monsters) < maxmonsters and
+   monstercount==0) then
   m=make_monster()
   add(monsters,m)
   monstercount=monsterdelay
-	end
-	monstercount=max(0,monstercount-1)
+ end
+ monstercount=max(0,monstercount-1)
 end
-		
+
+
 function update_bullets()
  for b in all(bullets) do
   b.y-=spd
   if(b.y<-1*b.ys) then
-  	del(bullets,b)
+   del(bullets,b)
   end
   --was there a collision?
   local bxc = b.x+flr(b.xs/2)
   local byc = b.y+flr(b.ys/2)
   for m in all(monsters) do
-  	if(bxc > m.x and
-  	   bxc < m.x+m.xs and
-  	   byc > m.y and
-  	   byc < m.y+m.ys) then
-  	 del(bullets,b)
-  	 m.alive=0
-  	 m.sprite=3
-  	 sfx(1)
-	   increase_score(10)
-  	end
+   if(bxc > m.x and
+     bxc < m.x+m.xs and
+     byc > m.y and
+     byc < m.y+m.ys) then
+    del(bullets,b)
+    m.alive=0
+    m.sprite=3
+    sfx(1)
+    increase_score(10)
+   end
   end
  end
 end
+
 
 function die()
  ship.alive=0
@@ -237,45 +251,47 @@ function die()
  end
 end
 
+
 function update_monsters()
  for m in all(monsters) do
   if(m.alive==0) then
    --finish death sequence
    if(m.sprite<8) then
-   	m.sprite+=1
+    m.sprite+=1
    else
     del(monsters,m)
    end
   else
- 	 m.y+=spd
- 	 if(m.y>128) then
- 	 	del(monsters,m)
- 	 	if(ship.alive==1 and
- 	 	   m.x > m.xs and
- 	 	   m.x < 128-m.xs) then
- 	 	 decrease_score(10)
- 	 	end
- 	 end
- 	 m.fx=m.fx+cos(m.r)*m.radius
- 	 m.x=flr(m.fx)
- 	 m.r+=0.01
- 	 if(m.r>1) then
- 	  m.r=0
- 	 end
- 	 --did a monster hit the ship?
- 	 local mxc=m.x+flr(m.xs/2)
- 	 local myc=m.y+flr(m.ys/2)
- 	 if(ship.alive==1 and
- 	    ship.flickering==0 and
- 	    mxc>ship.x and
- 	    mxc<ship.x+ship.xs and
- 	    myc>ship.y and
- 	    myc<ship.y+ship.ys) then
+   m.y+=spd
+   if(m.y>128) then
+      del(monsters,m)
+      if(ship.alive==1 and
+            m.x > m.xs and
+         m.x < 128-m.xs) then
+         decrease_score(10)
+      end
+   end
+   m.fx=m.fx+cos(m.r)*m.radius
+   m.x=flr(m.fx)
+   m.r+=0.01
+   if(m.r>1) then
+      m.r=0
+   end
+   --did a monster hit the ship?
+   local mxc=m.x+flr(m.xs/2)
+   local myc=m.y+flr(m.ys/2)
+   if(ship.alive==1 and
+         ship.flickering==0 and
+         mxc>ship.x and
+         mxc<ship.x+ship.xs and
+         myc>ship.y and
+      myc<ship.y+ship.ys) then
     die()
- 	 end
- 	end
+   end
+  end
  end
 end
+
 
 function update_stars()
  if(count(stars)<100 and
@@ -287,10 +303,11 @@ function update_stars()
  for s in all(stars) do
   s.y+=spd/2
   if(s.y>128) then
-  	del(stars,s)
+   del(stars,s)
   end
  end
 end
+
 
 function new_kid()
  if(count(kids) < maxkids and
@@ -299,6 +316,7 @@ function new_kid()
   add(kids,k)
  end
 end
+
 
 function update_kids()
  for k in all(kids) do
@@ -340,6 +358,7 @@ function update_kids()
  end
 end
 
+
 function update_message()
  if(messagecount<=0) then
   messagecount=messagedelay
@@ -349,16 +368,17 @@ function update_message()
  end
 end
 
+
 function _update()
  update_stars()
  if(playing==1) then
-	 update_ship()
-	 new_bullet()
-	 new_monster()
-	 new_kid()
-	 update_bullets()
-	 update_monsters()
-	 update_kids()
+  update_ship()
+  new_bullet()
+  new_monster()
+  new_kid()
+  update_bullets()
+  update_monsters()
+  update_kids()
  else
   --wait for buttonpress
   if(btn(5)) then
@@ -370,17 +390,20 @@ function _update()
  update_message()
 end
 
+
 function draw_stars()
  for s in all(stars) do
   pset(s.x,s.y,s.color)
  end
 end
 
+
 function draw_monsters()
-	for m in all(monsters) do
-		spr(m.sprite,m.x,m.y)
-	end
+ for m in all(monsters) do
+  spr(m.sprite,m.x,m.y)
+ end
 end
+
 
 function draw_player()
  if (ship.flickering==1) then
@@ -391,11 +414,13 @@ function draw_player()
  spr(ship.sprite,ship.x,ship.y)
 end
 
+
 function draw_bullets()
  for b in all(bullets) do
   spr(b.sprite,b.x,b.y)
  end
 end
+
 
 function draw_kids()
  for k in all(kids) do
@@ -404,17 +429,20 @@ function draw_kids()
  end
 end
 
+
 function draw_message()
  if(message~="") then
   print(message,128/3,128/2,7)
  end
 end
 
+
 function draw_scoreboard()
  print(score,0,0,7)
  print("lives:",80,0,7)
  print(lives,110,0,7)
 end
+
 
 function draw_intro()
  local yspot=128/2-64/2
@@ -429,6 +457,7 @@ function draw_intro()
  print("michael stanton, 2015",
        25,120,7)
 end
+
 
 function _draw()
  rectfill(0,0,128,128,0)
